@@ -1,0 +1,23 @@
+{
+    "name": "bluethink/module-buynow",
+    "description": "Magento 2 add buyNow button extension",
+    "license": "proprietary",
+    "type": "magento2-module",
+    "version": "1.0.1",
+    "authors": [
+        {
+            "name": "Santosh Patel",
+            "email": "santosh.bluethink@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Bluethink\\Test\\": ""
+        }
+    }
+}

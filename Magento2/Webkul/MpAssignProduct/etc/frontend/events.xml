@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_MpAssignProduct
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="checkout_cart_product_add_after">
+		<observer name="mpassignproduct.customprice" instance="Webkul\MpAssignProduct\Observer\CustomPrice" />
+	</event>
+	<event name="checkout_onepage_controller_success_action">
+		<observer name="mpassignproduct.afterplaceorder" instance="Webkul\MpAssignProduct\Observer\AfterPlaceOrder" />
+	</event>
+	<event name="checkout_cart_add_product_complete">
+		<observer name="mpassignproduct.afteraddproducttocart" instance="Webkul\MpAssignProduct\Observer\AfterAddProductToCart" />
+	</event>
+	<event name="sales_quote_remove_item">
+		<observer name="mpassignproduct.removeitem" instance="Webkul\MpAssignProduct\Observer\AfterRemoveItem" />
+	</event>
+	<event name="controller_action_predispatch_checkout_cart_index">
+		<observer name="mpassignproduct.beforeviewcart" instance="Webkul\MpAssignProduct\Observer\BeforeViewCart" />
+	</event>
+	<event name="controller_action_predispatch_checkout_index_index">
+		<observer name="mpassignproduct.beforeviewcart" instance="Webkul\MpAssignProduct\Observer\BeforeViewCart" />
+	</event>
+	<event name="mp_delete_product">
+		<observer name="mpassignproduct.assignseller" instance="Webkul\MpAssignProduct\Observer\AssignSeller" />
+	</event>
+	<event name="mp_product_save_after">
+		<observer name="mpassignproduct.savesellerproduct" instance="Webkul\MpAssignProduct\Observer\SaveSellerProduct" />
+	</event>
+</config>

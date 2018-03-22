@@ -1,0 +1,29 @@
+<?php
+/** @var \Mirasvit\Helpdesk\Block\Adminhtml\Report\Ticket\Container $block */
+?>
+<?php
+$_switcher = $block->getStoreSwitcherHtml();
+$_toolbar = $block->getToolbarHtml();
+$_grid = $block->getGridHtml();
+$_chart = $block->getChartHtml();
+?>
+
+<div class="helpdesk-report-ticket-container">
+    <div class="content-header">
+        <h3><?= $block->getHeaderText() ?></h3>
+        <sup style="display:none;"><?= $block->getDate()->date() ?> (GMT <?php  echo $block->getDate()->getGmtOffset('hours') ?>)</sup>
+    </div>
+
+    <?php //echo $_switcher ?>
+
+    <?= $_chart ?>
+    <?= $_toolbar ?>
+    <?= $_grid ?>
+
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script>
+    google.load("visualization", '1.1', {packages:['corechart'], 'language': 'en'});
+    google.setOnLoadCallback(drawCharts);
+</script>

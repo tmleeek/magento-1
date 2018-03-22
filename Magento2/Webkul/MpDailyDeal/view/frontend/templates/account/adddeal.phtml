@@ -1,0 +1,88 @@
+<?php 
+
+/**
+ * Webkul_MpDailyDeal Add Deal.
+ * @category  Webkul
+ * @package   Webkul_MpDailyDeal
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2016 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+$dealProduct = $block->getDealProduct();
+$currentCurrency =  $block->getCurrencySymbol();
+if ($dealProduct) { ?>
+	<form action="<?php /* @escapeNotVerified */ echo $block->getDealSaveAction() ?>" method="POST"  id="form-customer-attr-new" data-mage-init='{"validation":{}}'>
+	<div class="wk-mp-design">
+		<fieldset class="info wk-mp-fieldset fieldset" id="associate-product">
+			<legend class="legend">
+				<span><?php /* @escapeNotVerified */ echo __('Add Deal On Product') ?></span>
+				<button class="button wk-mp-btn" title="<?php /* @escapeNotVerified */ echo __('Save') ?>" type="submit" id="save-btn">
+					<span><span><?php /* @escapeNotVerified */ echo __('Save Deal') ?></span></span>
+				</button>
+			</legend>			
+			<?php /* @escapeNotVerified */ echo $block->getBlockHtml('formkey');
+				$required = $dealProduct->getDealStatus()? 'required':'';
+				$requiredEntry = $dealProduct->getDealStatus()? 'required-entry':'';
+			?>
+
+			<div class="fieldset form-list" id="cust">
+				<div class="field">
+					<label class="label"><?php /* @escapeNotVerified */ echo __('Deal Status') ?> : </label>
+					<div class="control">
+						<select id="deal_status" class="select" title="<?php /* @escapeNotVerified */ echo __('Deal Status') ?>" name="deal_status">
+							<option value="0" <?php /* @escapeNotVerified */ echo $dealProduct->getDealStatus()? '' : 'selected="selected"' ?> >
+								<?php /* @escapeNotVerified */ echo __("Disable"); ?>
+							</option>
+							<option value="1" <?php /* @escapeNotVerified */ echo $dealProduct->getDealStatus()? 'selected="selected"' : '' ?> >
+								<?php /* @escapeNotVerified */ echo __("Enable"); ?>
+							</option>
+						</select>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label"><?php /* @escapeNotVerified */ echo __('Discount Type') ?> : </label>
+					<div class="control">
+						<select id="deal_discount_type" class="select val_required" title="Discount Type" name="deal_discount_type">
+							<option value="fixed" <?php /* @escapeNotVerified */ echo $dealProduct->getDealStatus()=='fixed'? 'selected="selected"' : '' ?> ><?php /* @escapeNotVerified */ echo __("Fixed"); ?></option>
+							<option value="percent" <?php /* @escapeNotVerified */ echo $dealProduct->getDealStatus()=='percent'? 'selected="selected"' : '' ?> ><?php /* @escapeNotVerified */ echo __("Percent"); ?></option>
+						</select>
+					</div>
+				</div>
+				<div class="field <?php echo $required ?>">
+					<label class="label"><?php /* @escapeNotVerified */ echo __('Deal Value') ?> : </label>
+					<div class="control">
+						<input type="text" value="<?php /* @escapeNotVerified */ echo $dealProduct->getDealValue()?>" class="<?php echo $requiredEntry ?> validate-zero-or-greater input-text" name="deal_value" id="deal_value" />
+					</div>
+					<p><?php echo __('This field use for fill deal price in current store currency ( '. $currentCurrency .' ) if deal type is Fixed and if deal type is percent (%) then it take deal price in %')?></p>
+				</div>
+				<div class="field <?php echo $required ?>">
+					<label class="label"><?php /* @escapeNotVerified */ echo __('Date From ') ?> : </label>
+					<div class="control">
+						<input type="text" value="<?php /* @escapeNotVerified */ echo $block->getDateTimeAsLocale($dealProduct->getDealFromDate())?>" class="<?php echo $requiredEntry ?> widthinput input-text" name="deal_from_date" id="deal_from_date" />
+					</div>
+				</div>
+				<div class="field <?php echo $required ?>">
+					<label class="label"><?php /* @escapeNotVerified */ echo __('Date To ') ?> : </label>
+					<div class="control">
+						<input type="text" value="<?php /* @escapeNotVerified */ echo $block->getDateTimeAsLocale($dealProduct->getDealToDate())?>" class="<?php echo $requiredEntry ?> widthinput input-text" name="deal_to_date" id="deal_to_date" />
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</form>
+<div class="buttons-set">
+	<p class="back-link">
+		<a href="javascript:;" onclick="javascript: window.history.back();" class="left">&laquo; <?php /* @escapeNotVerified */ echo __('Back') ?></a>
+	</p>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {"addDealOnProduct": {}}
+    }
+</script>
+<?php } else { ?>
+<h3><?php /* @escapeNotVerified */ echo __('Product not exist')?></h3>
+<?php } ?>
+

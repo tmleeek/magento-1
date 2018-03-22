@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Bluethink. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+         <add id="Bluethink_Checkdelivery::bluethink_index_index" 
+            title="Bluethink" 
+            module="Bluethink_Checkdelivery"  
+            sortOrder="20" 
+            dependsOnModule="Bluethink_Checkdelivery"  
+            resource="Magento_Backend::content"/>
+<!-- 
+        <add id="Bluethink_Checkdelivery::bluethink_checkdelivery" 
+            title="Checkdelivery" 
+            module="Bluethink_Checkdelivery" 
+            sortOrder="1" 
+            resource="Bluethink_Checkdelivery::bluethink_index_index" 
+            parent="Bluethink_Checkdelivery::bluethink_index_index" 
+            action="checkdelivery/index/index"/> -->
+
+        <add id="Bluethink_Checkdelivery::bluethink_pincode" 
+            title="Pincode" 
+            module="Bluethink_Checkdelivery" 
+            sortOrder="2" 
+            resource="Bluethink_Checkdelivery::bluethink_index_index" 
+            parent="Bluethink_Checkdelivery::bluethink_index_index" 
+            action="checkdelivery/pincode/index"/>
+<!--AddMenu-->
+    </menu>
+</config>

@@ -1,0 +1,24 @@
+<?php
+/**
+ $block->getHelpdeskString()  \Mirasvit\Helpdesk\Helper\StringUtil  $_helpdeskString
+ */
+?>
+<?php if ($block->getMessages()->count() && $block->getLimit()) :?>
+<br>
+<br>
+<b><?= __('Ticket History') ?></b><br>
+<?php foreach ($block->getMessages() as $message):?>
+    <p>
+        <i>
+            <?php if ($message->getCustomerName()):?>
+                <?= $message->getCustomerName() ?>
+            <?php else: ?>
+                <?= $message->getFrontendUserName() ?>
+            <?php endif ?> |
+            <?= $block->formatDate($message->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+        </i><br>
+
+        <?= $block->getHelpdeskString()->convertToHtml($message->getBody()) ?>
+    </p>
+<?php endforeach ?>
+<?php endif;?>

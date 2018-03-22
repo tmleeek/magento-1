@@ -1,0 +1,15 @@
+<div class="data-grid-cell-content reports__grid-cell-number">
+    <span data-bind="html: $col.getLabel($row())"></span>
+
+    <div class="reports__grid-percent-line" data-bind="visible: percent">
+        <div class="reports__grid-percent-line-val" data-bind="text: $col.getPercent($row()) + '%'"></div>
+
+        <div class="reports__grid-percent-line-b"
+                data-bind="style: { background: color }"></div>
+        <div class="reports__grid-percent-line-i"
+                data-bind="style: {
+                    width: $col.getPercent($row()) + '%',
+                    background: color
+                }"></div>
+    </div>
+</div>

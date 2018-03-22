@@ -1,0 +1,18 @@
+<div class="reports__toolbar-daterangepicker">
+    <input type="text" class="admin__control-text daterangepicker-input hasDatepicker"
+           data-bind="daterangepicker: {
+                    storageFrom: from,
+                    storageTo: to,
+                    options: {
+                        ranges: intervals,
+                        startDate: from(),
+                        endDate: to(),
+                        locale: {
+                            monthNames: locale.months.abbreviated,
+                            daysOfWeek: locale.days.abbreviated,
+                            firstDay: locale.firstDay
+                        }
+                    }
+               }">
+    <span class="daterangepicker-trigger"></span>
+</div>

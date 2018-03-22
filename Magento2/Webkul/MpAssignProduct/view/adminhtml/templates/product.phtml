@@ -1,0 +1,115 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_MpAssignProduct
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<?php
+    $assignProduct = $block->getDetails();
+    $sellerId = $assignProduct->getSellerId();
+    $ownerId = $assignProduct->getOwnerId();
+    $product = $block->getProduct($assignProduct->getProductId());
+    $productId = $product->getId();
+    $productUrl = $this->getUrl("catalog/product/edit")."id/";
+    $sellerDetails = $block->getSellerDetails($sellerId);
+    $ownerDetails = $block->getSellerDetails($ownerId, $productId);
+    $avialableStatus = [0 => __("Disapproved"), 1 => __("Approved")];
+    $customerUrl = $this->getUrl("customer/index/edit")."id/";
+    $currencyCode = $block->getBaseCurrencyCode();
+    $type = $product->getTypeId();
+?>
+
+<table class="wk-ap-table">
+    <input type="hidden" name="id" value="<?php echo $assignProduct->getId(); ?>">
+    <tr>
+        <td><?php echo __("Product Name"); ?></td>
+        <td><a href="<?php echo $productUrl.$productId; ?>" target="_blank"><?php echo $product->getName(); ?></a></td>
+    </tr>
+    <tr>
+        <td><?php echo __("Product Owner"); ?></td>
+        <td>
+            <?php if ($ownerDetails['seller_id'] > 0): ?>
+                <a href="<?php echo $customerUrl.$ownerDetails['seller_id']; ?>" target="_blank">
+                    <?php echo $ownerDetails['shop_title']; ?>
+                </a>
+            <?php else: ?>
+                <?php echo $ownerDetails['shop_title']; ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td><?php echo __("Assigned By"); ?></td>
+        <td>
+            <?php if ($sellerDetails['seller_id'] > 0): ?>
+                <a href="<?php echo $customerUrl.$sellerDetails['seller_id']; ?>" target="_blank">
+                    <?php echo $sellerDetails['shop_title']; ?>
+                </a>
+            <?php else: ?>
+                <?php echo $sellerDetails['shop_title']; ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php if ($type == "configurable"): ?>
+         <?php
+            $assignId = $assignProduct->getId();
+            $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+            $associatedProducts = $block->getHelper()->getAssignedAssociatedProducts($assignId);
+        ?>
+        <tr>
+            <td><?php echo __("Associated Products"); ?></td>
+            <td>
+                <table class="wk-associate-table">
+                    <thead>
+                        <tr>
+                            <th><?php echo __("Product Name"); ?></th>
+                            <th><?php echo __("Quantity"); ?></th>
+                            <th><?php echo __("Price"); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($associatedProducts as $associate): ?>
+                            <?php
+                                $name = $associate->getName();
+                                $qty = $associate->getQty();
+                                $price = $priceHelper->currency($associate->getPrice(), true, false);
+                            ?>
+                            <tr>
+                                <td><a href="<?php echo $productUrl.$associate->getProductId(); ?>" target="_blank"><?php echo $name; ?></a></td>
+                                <td><?php echo $qty; ?></td>
+                                <td><?php echo $price; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <?php else: ?>
+        <tr>
+            <td><?php echo __("Quantity"); ?></td>
+            <td><?php echo $assignProduct->getQty(); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo __("Price"); ?> (<?php echo $currencyCode; ?>)</td>
+            <td><?php echo number_format($assignProduct->getPrice(), 2); ?></td>
+        </tr>
+    <?php endif; ?>
+    <tr>
+        <td><?php echo __("Status"); ?></td>
+        <td>
+            <select name="product_status">
+                <?php foreach ($avialableStatus as $key => $status): ?>
+                    <?php if ($key == $assignProduct->getStatus()): ?>
+                        <option value="<?php echo $key; ?>" selected><?php echo $status; ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo $key; ?>"><?php echo $status; ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+</table>

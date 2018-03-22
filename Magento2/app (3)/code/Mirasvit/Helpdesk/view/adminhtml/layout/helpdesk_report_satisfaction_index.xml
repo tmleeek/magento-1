@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="head"/>
+        <referenceContainer name="content">
+            <block name="report.grid.container" class="Mirasvit\Helpdesk\Block\Adminhtml\Report\Satisfaction" template="report/satisfaction/grid/container.phtml">
+                <block name="grid.filter.form" class="Mirasvit\Helpdesk\Block\Adminhtml\Report\Satisfaction\Filter"/>
+                <block name="grid.chart" class="Mirasvit\Helpdesk\Block\Adminhtml\Report\Satisfaction\Chart" template="report/satisfaction/grid/chart.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

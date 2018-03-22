@@ -1,0 +1,21 @@
+{
+    "name": "webkul/module-mp-assign-product",
+    "description": "Magento 2 Marketplace Seller Price Comparison",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "webkul/module-marketplace": "2.0.*"
+    },
+    "type": "magento2-module",
+    "version": "2.0.2",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Webkul\\MpAssignProduct\\": ""
+        }
+    }
+}

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_MpAssignProduct
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<?php
+	$helper = $this->helper("Webkul\MpAssignProduct\Helper\Data");
+	$queryString = $helper->getQueryString();
+	$isPartner = $this->helper('Webkul\Marketplace\Helper\Data')->isSeller();
+	$collection = $this->getAllProducts();
+	$_imagehelper = $this->helper('Magento\Catalog\Helper\Image');
+?>
+<?php if ($isPartner == 1): ?>
+	<form method="get" action="<?php echo $this->getUrl('mpassignproduct/product/view'); ?>" id="wk_mpassignproduct_form" enctype="multipart/form-data" data-mage-init='{"validation":{}}'>
+		<fieldset class="fieldset">
+			
+			<div class="wk-mp-page-title page-title">
+			<h2>
+				<span><?php echo __("Assign Product"); ?></span>
+			</h2>
+		</div>
+		<?php echo $this->getFormKeyBlockHtml(); ?>
+			<div class="field required">
+				<label for="attribute_set" class="label">
+					<span><?php echo __("Search For Product"); ?></span>
+				</label>
+				<div class="control">
+					<input value="<?php echo $queryString; ?>" type="text" data-validate="{required:true}" class="input-text required-entry" title="query" name="query" id="query" aria-required="true" placeholder="Enter product name">
+					<button class="button wk-ap-btn" type="submit">
+						<span><span><?php echo __("Search"); ?></span></span>
+					</button>
+				</div>
+			</div>
+		</fieldset>
+	</form><br/><br/>
+	<p>Choose a Product Below or <a href="/pub/Vendor Stock Spreadsheet.pdf" title="Download Now" target="_blank">Download the PDF Here</a> to Complete and Email to <a href="mailto:info@everyskip.com.au" title="mail to: info@everyskip.com.au">info@everyskip.com.au</a>
+	<?php if($collection->getSize()): ?>
+		<br/><br/>
+		<fieldset class="fieldset ">
+			<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<th><?php echo __("Image"); ?></th>
+					<th><?php echo __("Name"); ?></th>
+					<th><?php echo __("Sell Yours"); ?></th>
+				</thead>
+				<tbody>
+				<?php foreach ($collection as $product): ?>
+					<?php
+						$image = 'category_page_list';
+						$productImage = $_imagehelper->init($product, $image)->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(75)->getUrl();
+						$price = $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($product->getFinalPrice(), true, false);
+					?>
+					<tr>
+						<td class="col wk-ap-img-col"><img src="<?php echo $productImage; ?>" /></td>
+						<td class="col"><?php echo $product->getName(); ?></td>
+						<td class="col wk-ap-btn-col">
+							<a href="<?php echo $this->getUrl('mpassignproduct/product/add')."id/".$product->getId(); ?>">
+								<button class="button wk-ap-btn"><span><span><?php echo __("Sell Yours"); ?></span></span></button>
+							</a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		</fieldset>
+	<?php endif ?>	
+	<?php if (false && $block->getPagerHtml()): ?>
+		<div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+	<?php endif ?>
+<?php else: ?>
+	<h2 class="wk-mp-error-msg">
+		<?php echo __("To Become Seller Please Contact to Admin."); ?>
+	</h2>
+<?php endif; ?>

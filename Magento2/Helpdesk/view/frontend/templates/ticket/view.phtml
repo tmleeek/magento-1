@@ -1,0 +1,137 @@
+<?php
+/** @var \Mirasvit\Helpdesk\Block\Ticket\View $block */
+?>
+<?php
+$ticket = $block->getTicket();
+?>
+<div class="hdmx__ticket-view">
+    <table class="hdmx__ticket-summary">
+        <tbody>
+        <tr>
+            <th><?= __('Request ID') ?></th>
+            <td><?= $ticket->getCode() ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Department') ?></th>
+            <td><?= $ticket->getDepartment() ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Priority') ?></th>
+            <td><?= $ticket->getPriority() ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Status') ?></th>
+            <td>
+                <span class="hdmx__status hdmx-<?= $ticket->getStatus()->getColor() ?>"
+                      data-mage-init='{"helpdeskCustomerAccount":{}}'>
+                    <?= $ticket->getStatus() ?></td>
+                </span>
+        </tr>
+
+        <?php if ($ticket->getOrderId()): ?>
+            <tr>
+                <th><?= __('Order') ?></th>
+                <td>
+                    <?= $block->getOrderLabel($ticket->getOrderId(), $block->getOrderUrl($ticket->getOrderId())) ?>
+                </td>
+            </tr>
+        <?php endif ?>
+
+        <?php foreach ($block->getCustomFields() as $field): ?>
+            <?php if (!$value = $block->getHelpdeskField()->getValue($ticket, $field))
+                continue; ?>
+            <tr>
+                <th><?= __($field->getName()) ?></th>
+                <td><?= $value ?></td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+
+    <form action="<?= $block->getPostUrl() ?>" method="POST" enctype="multipart/form-data"
+          class="hdmx__ticket-reply" data-mage-init='{"validation":{}}'>
+        <fieldset class='fieldset'>
+            <legend class="legend"><span><?= __('Post a Reply') ?></span></legend>
+            <div class="field required">
+                <label class="label" for="message">
+                    <span><?= __('Message') ?></span>
+                </label>
+
+                <div class="control">
+                    <textarea name="message" id="message" class="input-text required-entry" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="attachment">
+                    <span><?= __('Attachments') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="file" class="multi" name="attachment[]" id="attachment"/>
+                </div>
+            </div>
+
+            <div class="actions-toolbar">
+                <?php if ($ticket->isClosed()): ?>
+                    <button type="submit" class="action primary" title="<?= __('Reopen Ticket') ?>">
+                        <span><?= __('Reopen Ticket') ?></span>
+                    </button>
+                <?php else: ?>
+                    <button type="submit" class="action primary submitMessagebtn" title="<?= __('Submit Message') ?>">
+                        <span><?= __('Submit Message') ?></span>
+                    </button>
+                    <input type='hidden' name='close_ticket' id="close_ticket" value='0'>
+                    <button type="submit" class="action secondary" title="<?= __('Close Ticket') ?>"
+                            onclick="jQuery('#close_ticket').val(1);">
+                        <span><?= __('Close Ticket') ?></span>
+                    </button>
+                <?php endif ?>
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="fieldset hdmx__ticket-history">
+        <div class="legend"><span><?= __('History') ?></span></div>
+
+        <?php foreach ($ticket->getMessages() as $message): ?>
+            <div class="hdmx__message">
+                <div class="hdmx-message__header">
+                    <strong>
+                        <?php if ($message->getTriggeredBy() == \Mirasvit\Helpdesk\Model\Config::CUSTOMER): ?>
+                            <?= $message->getCustomerName() ?>
+                        <?php elseif ($message->getTriggeredBy() == \Mirasvit\Helpdesk\Model\Config::USER): ?>
+                            <?= $message->getFrontendUserName() ?>
+                            <?php if ($message->isThirdParty()): ?>
+                                <?= __('to %1 (third party)', $message->getThirdPartyEmail()) ?>
+                            <?php endif; ?>
+                        <?php elseif ($message->getTriggeredBy() == \Mirasvit\Helpdesk\Model\Config::THIRD): ?>
+                            <?= __('%1 (third party)', $message->getThirdPartyName()) ?>
+                        <?php endif ?>
+                    </strong>
+                    <?= $block->formatDate($message->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>  <?= $block->formatTime($message->getCreatedAt(), \IntlDateFormatter::SHORT) ?>
+                </div>
+
+                <div class="hdmx-message__body <?= $message->getTriggeredBy() ?>">
+                    <?= $message->getBodyHtml() ?>
+
+                    <?php $attachments = $message->getAttachments() ?>
+                    <?php if ($attachments && count($attachments)): ?>
+                        <div class="hdmx-message__attachments">
+                            <?php foreach ($message->getAttachments() as $attachment): ?>
+                                <a href="<?= $attachment->getUrl() ?>"><?= $attachment->getName() ?></a>
+                            <?php endforeach ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+
+    <?php if (!$this->isExternal()): ?>
+        <div class="buttons-set">
+            <p class="back-link"><a href="<?= $block->getUrl('helpdesk/ticket') ?>">
+                    <small>&laquo; </small><?= __('Back to My Tickets') ?></a></p>
+        </div>
+    <?php endif ?>
+</div>

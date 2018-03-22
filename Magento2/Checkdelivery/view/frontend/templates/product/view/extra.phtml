@@ -1,0 +1,29 @@
+<form name="gggg" method="post" id="fr1">
+ <h2> Check Availability at:</h2>
+ <input name="form_key" type="hidden" value="<?php echo $block->getFormKey();?>">
+    <input type="text" id="pincode0" name="pincode" placeholder="Enter Pincode" required="must fill">
+    <!-- <input type="button" id="test"  onclick="ajaxx(event)" value="Check" > -->
+    <a style="cursor: pointer;" id="test" onclick="ajaxx(event)">Check</a>
+</form>
+<p><i>Check product delivery at your location to enable Add to Cart</i></p>
+<p style="color: red">सामान की आपूर्ति 7-10 दिवस में होगी / Delivery period 7-10 days</p>
+<span style="color: green" id="msg"></span>
+<span style="color: red" id="msgs"></span>
+<script type="text/javascript">
+
+    function ajaxx(event)
+    { 
+       jQuery.ajax({
+              type:'POST',
+              url:"<?php echo $block->getUrl('checkdelivery/index/save');?>",
+              data: {input:jQuery("#pincode0").val()},
+              success:function(feedback){
+              jQuery("#msg").html(feedback);
+              },
+              error:function(){
+                jQuery("#msgs").html(feedback);
+              }     
+            });
+    }
+ </script>
+

@@ -1,0 +1,221 @@
+<?php
+/** @var \Mirasvit\Helpdesk\Block\Ticket\Listing $block */
+
+
+?>
+<?php
+$collection = $block->getTicketCollection()
+    ->joinFields()
+    ->setOrder('last_reply_at', 'desc');
+?>
+
+<?= $block->getChildHtml('helpdesk_mytickets_schedule_status') ?>
+
+<div class="hdmx__tickets" data-mage-init='{"helpdeskCustomerAccount":{}}'>
+    <?php if ($collection->count()): ?>
+        <div class="table-wrapper">
+            <table class="data table hdmx__tickets-table">
+                <caption class="table-caption"><?= __('Tickets') ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="col subject"><?= __('Subject') ?></th>
+                    <th class="col department"><?= __('Department') ?></th>
+                    <th class="col activity"><?= __('Last Activity') ?></th>
+                    <th class="col status"><?= __('Status') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($collection as $ticket): ?>
+                    <tr>
+                        <td data-th="<?= __('Subject') ?>" class="col subject">
+                            <a href="<?= $ticket->getUrl() ?>"><?= $ticket->getSubject() ?></a>
+                            <?php if (!$ticket->getLastMessage()->getIsRead()): ?>
+                                <span class="unread"></span>
+                            <?php endif ?>
+                        </td>
+                        <td data-th="<?= __('Department') ?>" class="col department">
+                            <?= $ticket->getDepartment() ?>
+                        </td>
+                        <td data-th="<?= __('Last Activity') ?>" class="col activity">
+                            <?= $ticket->getLastReplyName() ?>,
+                            <?= $block->formatDate($ticket->getLastReplyAt(), \IntlDateFormatter::MEDIUM) ?>
+                        </td>
+                        <td data-th="<?= __('Status') ?>" class="col status">
+                            <span class="hdmx__status hdmx-<?= $ticket->getStatus()->getColor() ?>">
+                                <?= $ticket->getStatus() ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="message info empty">
+            <span><?= __("You don't have open tickets") ?></span>
+        </div>
+    <?php endif ?>
+</div>
+
+<form action="<?= $block->getUrl('helpdesk/ticket/postmessage') ?>" method="POST" enctype="multipart/form-data"
+      data-mage-init='{"validation":{}}' class="hdmx__ticket-new">
+    <fieldset class="fieldset">
+        <legend class="legend">
+            <span><?= __('Create New Ticket') ?></span>
+        </legend>
+
+        <div class="fields group">
+            <div class="field required subject">
+                <label class="label" for="subject">
+                    <span><?= __('Subject') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="text" name="subject" id="subject" class="input-text required-entry">
+                </div>
+            </div>
+
+            <?php if ($block->getFrontendIsAllowPriority()): ?>
+                <div class="field required priority">
+                    <label class="label" for="priority_id">
+                        <span><?= __('Priority') ?></span>
+                    </label>
+
+                    <div class="control">
+                        <select name="priority_id" id="priority_id">
+                            <?php foreach ($block->getPriorityCollection() as $priority): ?>
+                                <option value="<?= $priority->getId() ?>">
+                                    <?= $priority->getName() ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <?php if ($block->getFrontendIsAllowDepartment()): ?>
+                <div class="field required department">
+                    <label class="label" for="department_id">
+                        <span><?= __('Department') ?></span>
+                    </label>
+
+                    <div class="control">
+                        <select name="department_id" id="department_id">
+                            <?php foreach ($block->getDepartmentCollection() as $department): ?>
+                                <option value="<?= $department->getId() ?>">
+                                    <?= $department->getName() ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+            <?php endif ?>
+
+               <!-- custom fields start -->
+        <div class="controlfieldWidth">
+
+            <div class="field">
+                <label class="label" for="subject">
+                    <span><?= __('OS') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="text" name="help_os" id="os" class="input-text">
+                </div>
+            </div>
+
+             <div class="field">
+                <label class="label" for="product">
+                    <span><?= __('Product') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="text" name="help_product" id="product" class="input-text">
+                </div>
+            </div>
+
+
+             <div class="field">
+                <label class="label" for="version">
+                    <span><?= __('Version') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="text" name="help_version" id="version" class="input-text">
+                </div>
+            </div>
+
+             <div class="field">
+                <label class="label" for="serialnumber">
+                    <span><?= __('Serial Number') ?></span>
+                </label>
+
+                <div class="control">
+                    <input type="text" name="help_serialnumber" id="serialnumber" class="input-text">
+                </div>
+            </div>
+</div>
+        <!-- custom fields end -->
+        </div>
+
+     
+
+        <div class="field required">
+            <label class="label" for="message">
+                <span><?= __('Message') ?></span>
+            </label>
+
+            <div class="control">
+                <textarea name="message" id="message" class="input-text required-entry" rows="5"></textarea>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="attachment">
+                <span><?= __('Attachments') ?></span>
+            </label>
+
+            <div class="control">
+                <input type="file" class="multi" name="attachment[]" id="attachment"/>
+            </div>
+        </div>
+
+        <div class="fields group">
+            <?php if ($block->getFrontendIsAllowOrder() && $block->getOrderCollection()->count()): ?>
+                <div class="field order">
+                    <label class="label" for="order_id">
+                        <span><?= __('Order') ?></span>
+                    </label>
+
+                    <div class="control">
+                        <select name="order_id" id="order_id">
+                            <option value=""><?= __('-- Select an Order --') ?></option>
+                            <?php foreach ($block->getOrderCollection() as $order): ?>
+                                <option
+                                    value="<?= $order->getId() ?>"><?= $block->getOrderLabel($order) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <?php foreach ($block->getCustomFields() as $field): ?>
+                <div class="field custom">
+                    <label class="label" for="<?= $field->getCode() ?>">
+                        <span><?= $field->getName(); ?></span>
+                    </label>
+                    <div class="control">
+                        <?= $block->getInputHtml($field) ?>
+                    </div>
+                    <p class="note"><?= $field->getDescription() ?></p>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </fieldset>
+
+    <div class="actions-toolbar submitTicketbtn">
+        <button type="submit" class="action primary" title="<?= __('Submit Ticket') ?>">
+            <span><?= __('Submit Ticket') ?></span>
+        </button>
+    </div>
+</form>

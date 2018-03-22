@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul_MpDailyDeal View On Product layout.
+ * @category  Webkul
+ * @package   Webkul_MpDailyDeal
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2016 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+        <css src="Webkul_MpDailyDeal::css/style.css"/>
+    </head>
+    <body>
+        <referenceContainer name="product.info.main" >
+            <block class="Webkul\MpDailyDeal\Block\ViewOnProduct" after="product.info.price" name="deal.detail.vew" as="deal_detail_view" template="Webkul_MpDailyDeal::viewonproduct.phtml" cacheable="false" ></block>
+        </referenceContainer>
+        <referenceContainer name="marketplace_sellerprofile22" >
+        	  <block class="Webkul\MpDailyDeal\Block\DealLink" name="marketplace_deal_link_block" template="deal_link_block.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

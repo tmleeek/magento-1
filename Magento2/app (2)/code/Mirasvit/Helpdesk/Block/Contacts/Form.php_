@@ -1,0 +1,111 @@
+<?php
+
+namespace Mirasvit\Helpdesk\Block\Contacts;
+
+class Form extends \Magento\Framework\View\Element\Template
+{
+    /**
+     * @var \Mirasvit\Helpdesk\Model\PriorityFactory
+     */
+    protected $priorityFactory;
+
+    /**
+     * @var \Mirasvit\Helpdesk\Model\DepartmentFactory
+     */
+    protected $departmentFactory;
+
+    /**
+     * @var \Mirasvit\Helpdesk\Model\Config
+     */
+    protected $config;
+
+    /**
+     * @var \Mirasvit\Helpdesk\Helper\Field
+     */
+    protected $helpdeskField;
+
+    /**
+     * @var \Magento\Framework\View\Element\Template\Context
+     */
+    protected $context;
+
+    /**
+     * @param \Mirasvit\Helpdesk\Model\PriorityFactory         $priorityFactory
+     * @param \Mirasvit\Helpdesk\Model\DepartmentFactory       $departmentFactory
+     * @param \Mirasvit\Helpdesk\Model\Config                  $config
+     * @param \Mirasvit\Helpdesk\Helper\Field                  $fieldHelper
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Contact\Helper\Data                     $contactHelper
+     * @param \Magento\Framework\Module\Manager                $moduleManager
+     * @param array                                            $data
+     */
+    public function __construct(
+        \Mirasvit\Helpdesk\Model\PriorityFactory $priorityFactory,
+        \Mirasvit\Helpdesk\Model\DepartmentFactory $departmentFactory,
+        \Mirasvit\Helpdesk\Model\Config $config,
+        \Mirasvit\Helpdesk\Helper\Field $fieldHelper,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Contact\Helper\Data $contactHelper,
+        \Magento\Framework\Module\Manager $moduleManager,
+        array $data = []
+    ) {
+        $this->priorityFactory = $priorityFactory;
+        $this->departmentFactory = $departmentFactory;
+        $this->config = $config;
+        $this->contactHelper = $contactHelper;
+        $this->helpdeskField = $fieldHelper;
+        $this->moduleManager = $moduleManager;
+        $this->context = $context;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserName()
+    {
+        return $this->contactHelper->getUserName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserEmail()
+    {
+        return $this->contactHelper->getUserEmail();
+    }
+
+
+    /**
+     * @return \Mirasvit\Helpdesk\Model\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return object
+     */
+    public function getContactUsIsActive()
+    {
+        return $this->getConfig()->getGeneralContactUsIsActive();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormAction()
+    {
+        return $this->context->getUrlBuilder()->getUrl('helpdesk/form/post');
+    }
+
+    /**
+     * @param string $field
+     * @return string
+     */
+    public function getInputHtml($field)
+    {
+        return $this->helpdeskField->getInputHtml($field);
+    }
+}

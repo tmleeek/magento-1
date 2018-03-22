@@ -1,0 +1,31 @@
+<?php 
+/**
+ * Webkul_MpDailyDeals View On Product template.
+ * @category  Webkul
+ * @package   Webkul_MpDailyDeals
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2016 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+$dealDetail = $block->getCurrentProductDealDetail();
+
+if ($dealDetail && $dealDetail['deal_status'] 
+    && isset($dealDetail['diff_timestamp'])) { ?>
+	<div class="deal wk-daily-deal">
+        <span class="price-box ">
+            <b class="price-label">OFF : <?php /* @escapeNotVerified */ echo $dealDetail['discount-percent']?> %</b>
+        </span>
+        <span class="save-box ">
+            <b class="save-label">Save : <?php /* @escapeNotVerified */ echo $dealDetail['saved-amount']?></b>
+        </span>
+        <p class="wk_cat_count_clock" data-stoptime="<?php /* @escapeNotVerified */ echo $dealDetail['stoptime'] ?>" 
+        	data-diff-timestamp ="<?php /* @escapeNotVerified */ echo $dealDetail['diff_timestamp'] ?>">
+    	</p>
+	</div>
+	<script type="text/x-magento-init">
+    {
+        "body": {"viewondeal": {}}
+    }
+	</script>
+<?php } ?>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright : 2016 Pixafy Services LLC. All rights reserved.
+ * @license  http://opensource.org/licenses/OSL-3.0  The Open Software License 3.0 (OSL 3.0)
+ * @author Alex Lukyanau <alukyanau@pixafy.com>
+ */ 
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!--
+        <preference for="Magento\Tax\Model\Calculation\CalculatorFactory"
+            type="VertexSMB\Tax\Model\Tax\Calculation\CalculatorFactory" />
+
+     -->
+    <type name="Magento\Tax\Model\Calculation\CalculatorFactory">
+        <plugin name="addVertexSMCalculation" type="VertexSMB\Tax\Model\Plugin\CalculatorFactoryPlugin" sortOrder="1" />
+    </type>
+    <type name="Magento\Tax\Model\System\Config\Source\Algorithm">
+        <plugin name="addVertexSMBCalculationMethod" type="VertexSMB\Tax\Model\Plugin\AlgorithmPlugin" sortOrder="1" />
+    </type>
+    <type name="Magento\Tax\Model\Sales\Total\Quote\Subtotal">
+        <plugin name="addVertexSMBCalculationItemSku" type="VertexSMB\Tax\Model\Plugin\SubtotalPlugin" sortOrder="1" />
+    </type>
+</config>

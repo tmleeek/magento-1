@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright: 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_invoice_save_after">
+        <observer name="vertexsmb_invoice_created_observer" instance="VertexSMB\Tax\Observer\InvoiceSavedAfterObserver" />
+    </event>
+    <event name="sales_order_creditmemo_refund">
+        <observer name="vertexsmb_order_creditmemo_observer" instance="VertexSMB\Tax\Observer\CreditMemoObserver" />
+    </event>
+</config>

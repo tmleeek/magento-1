@@ -1,0 +1,18 @@
+﻿<button type="submit" style=
+margin-right: -186px;  title="<?php  echo __('Buy Now') ?>" id="buy-now" class="redbtn" style="font-size: 1.8rem;padding: 17px 17px;
+    width: 49%;" data-mage-init='
+{
+    "Bluethink_Buynow/js/buy-now": {
+        "form": "#product_addtocart_form"
+    }
+}
+'>
+<?php 
+$objectManager  = \Magento\Framework\App\ObjectManager::getInstance();
+$product        = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+$priceHelper    = $objectManager->create('Magento\Framework\Pricing\Helper\Data'); // Instance of Pricing Helper
+$price          =  $product->getFinalPrice(); //Your Price
+$formattedPrice = $priceHelper->currency($price, true, false);
+?>
+    <span><?php //echo $formattedPrice." &nbsp"; ?><i class="fa fa-shopping-cart mr5"><?php echo '&nbsp'; ?><?php  echo __('Buy Now') ?></i></span>
+</button>

@@ -1,0 +1,71 @@
+<?php
+/**
+* Webkul Software
+*
+* @category Webkul
+* @package Webkul_Stripe
+* @author Webkul
+* @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+* @license https://store.webkul.com/license.html
+*/
+
+$cards = $block->getSavedCards();
+ ?>
+<form action="<?php echo $block->getUrl('stripe/cards/delete', ['_secure' => $this->getRequest()->isSecure()]) ?>" enctype="multipart/form-data" method="post" id="form-stripe-validate">
+	<div class="wk-mp-design">
+		<fieldset class="fieldset info">
+			<legend class="legend">
+				<span><?php echo __('Your Saved Payment Types') ?></span>
+			</legend>	
+			<?php echo $block->getBlockHtml('formkey') ?>
+			<?php if($cards){ ?>
+					<table cellspacing="0" class="border data-grid">
+						<thead>
+							<tr>
+								<th class="data-grid-th">
+									<?php echo __('Select'); ?>
+								</th>
+								<th class="data-grid-th">
+									<?php echo __('Payment Types'); ?>
+								</th>
+							</tr>
+						</thead>		
+						<?php foreach($cards as $card){ ?>
+							<tr>
+								<td>
+									<input type="checkbox" class="checkbox" name="card_id[]" value="<?php echo $card->getEntityId(); ?>">
+								</td>
+								<td>
+									<label class="label">
+									<div class="stripe_logo_label">
+										
+										<img src="<?php echo $block->getLogo(str_replace(" ","_",$card->getData("brand"))); ?>" />
+
+										<?php echo " ".$card->getData('label'); ?>
+									</div>
+									</label>
+								</td>
+							</tr>
+						<?php } ?>
+						<tfoot>
+							<tr>
+								<td colspan="2">
+									<button class="button wk-mp-btn" title="<?php echo __('Delete') ?>" type="submit" id="save_butn">	<span><span><?php echo __('Delete') ?></span></span></button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+					
+				<?php }else{ ?>
+					<div class="emptymsg">
+							<?php echo __('No payment methods available') ?>
+					</div>
+				<?php } ?>	
+			<div class="buttons-set">
+				<p class="back-link">
+					<a href="javascript:;" onclick="javascript: window.history.back();" class="left">&laquo; <?php echo __('Back') ?></a>
+				</p>
+			</div>
+		</fieldset>
+	</div>
+</form>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<body>
+    <referenceContainer name="product.info.extrahint">
+        <block class="Bluethink\Checkdelivery\Block\Index\Index"
+            template="Bluethink_Checkdelivery::product/view/extra.phtml">
+        </block>
+    </referenceContainer>
+</body>

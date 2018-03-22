@@ -1,0 +1,23 @@
+<?php
+/** @var \Mirasvit\Helpdesk\Block\Adminhtml\Notification\Indicator $block */
+?>
+<script>
+    var notificationInterval = "<?php echo $block->getNotificationInterval()*1000; ?>";
+    var notificationCheckUrl = "<?php echo $block->getCheckNotificationUrl(); ?>";
+    var notificationIcon = "<?php echo $block->getViewFileUrl("Mirasvit_Helpdesk::images/notification_icon.png"); ?>";
+</script>
+
+<li><hr></li>
+<li>
+    <a
+        href="<?php /* @escapeNotVerified */ echo $block->getUrl('helpdesk/ticket') ?>"
+        title="<?php echo $block->escapeHtml(__('Tickets')) ?>">
+            <span id="notification-ticket-indicator">
+                <?php echo __('Tickets'); ?> <span id="desktop_notification_tickets"><?php
+                    echo $block->getNewTicketsNumber();
+                ?></span>/<span id="desktop_notification_messages"><?php
+                    echo $block->getUserMessagesNumber();
+                ?></span>
+            </span>
+    </a>
+</li>

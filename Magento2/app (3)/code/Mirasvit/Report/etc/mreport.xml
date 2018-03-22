@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="mreport.xsd">
+
+    <table name="catalog_category_product" connection="default">
+        <columns>
+            <column name="category_id" label="Category ID" fields="category_id"/>
+            <column name="product_id" label="Product ID" fields="product_id"/>
+        </columns>
+    </table>
+
+    <eavTable name="customer_entity" type="customer" connection="default">
+        <columns>
+            <column name="entity_id" label="Customer ID" fields="entity_id" type="number"/>
+        </columns>
+    </eavTable>
+
+    <eavTable name="customer_address_entity" type="customer_address" connection="default" />
+
+    <eavTable name="catalog_product_entity" type="catalog_product" connection="default">
+        <columns>
+            <column name="entity_id" label="Product ID" fields="entity_id" type="number"/>
+            <column name="type_id" label="Product Type" fields="type_id" type="select"
+                    options="Mirasvit\Report\Model\Config\Source\ProductType"/>
+            <column name="attribute" label="Attribute" fields="entity_id"/>
+        </columns>
+    </eavTable>
+
+    <eavTable name="catalog_category_entity" type="catalog_category" connection="default">
+        <columns>
+            <column name="entity_id" label="Category ID" fields="entity_id" type="number"/>
+        </columns>
+    </eavTable>
+
+    <relation name="catalog_category_entity2catalog_category_product">
+        <leftTable>catalog_category_entity</leftTable>
+        <rightTable>catalog_category_product</rightTable>
+        <condition>%1.entity_id=%2.category_id</condition>
+        <type>11</type>
+    </relation>
+
+    <relation name="catalog_category_product2catalog_product_entity">
+        <leftTable>catalog_category_product</leftTable>
+        <rightTable>catalog_product_entity</rightTable>
+        <condition>%1.product_id=%2.entity_id</condition>
+        <type>11</type>
+    </relation>
+</config>

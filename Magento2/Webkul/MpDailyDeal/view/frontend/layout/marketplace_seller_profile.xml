@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul_MpDailyDeal add Deal layout page.
+ * @category  Webkul
+ * @package   Webkul_MpDailyDeal
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2016 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="3columns" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    	<referenceContainer name="sidebar.main">
+        	<block class="Webkul\MpDailyDeal\Block\DealLink" name="marketplace_deal_link_block" template="deal_link_block.phtml" cacheable="false" before="marketplace_sellerprofileleft" />
+    	</referenceContainer>
+        
+    </body>
+</page>

@@ -1,0 +1,40 @@
+<?php
+/** @var Mirasvit\Helpdesk\Block\Adminhtml\Ticket\Edit\Tab\Messages $this */
+?>
+<div class="helpdesk-messages">
+    <?php foreach ($this->getMessages(true) as $message): ?>
+        <div><a target="_blank" href="<?= $this->getSourceUrl($message) ?>"><?= __('show source') ?></a></div>
+        <div
+            class="message <?= $message->getType() ?> <?php if ($message->getCustomerEmail()): ?>user<?php else: ?>staff<?php endif ?> ">
+            <div class="message-header">
+                <?php if ($message->getTriggeredBy() == Mirasvit\Helpdesk\Model\Config::CUSTOMER): ?>
+                    <?php if ($message->getCustomerName() != ''): ?>
+                        <?= $message->getCustomerName() ?>,
+                    <?php endif; ?>
+                    <?= $message->getCustomerEmail() ?>
+                <?php elseif ($message->getTriggeredBy() == Mirasvit\Helpdesk\Model\Config::USER): ?>
+                    <?= $message->getUserName() ?>
+                    <?php if ($message->isThirdParty()): ?>
+                        <?= __('to %1 (third party)', $message->getThirdPartyEmail()) ?>
+                    <?php endif; ?>
+                <?php elseif ($message->getTriggeredBy() == Mirasvit\Helpdesk\Model\Config::THIRD): ?>
+                    <?= __('%1 (third party)', $message->getThirdPartyName()) ?>
+                <?php endif; ?>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <?= $block->formatDate($message->getCreatedAt(), \IntlDateFormatter::MEDIUM); ?> <?php
+                $block->formatTime($message->getCreatedAt(), \IntlDateFormatter::SHORT); ?>
+            </div>
+
+            <div class="message-text"><?= $message->getBodyHtml() ?></div>
+
+            <?php $_attachments = $message->getAttachments() ?>
+            <?php if (count($_attachments)): ?>
+                <div class="attachment">
+                    <?php foreach ($_attachments as $_attachment): ?>
+                        <a href="<?= $_attachment->getBackendUrl() ?>"><?= $_attachment->getName() ?></a>
+                    <?php endforeach ?>
+                </div>
+            <?php endif ?>
+        </div>
+    <?php endforeach ?>
+</div>

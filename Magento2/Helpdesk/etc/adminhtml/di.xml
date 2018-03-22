@@ -1,0 +1,23 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Mirasvit\Core\Block\Adminhtml\Menu">
+        <arguments>
+            <argument name="menu" xsi:type="array">
+                <item name="helpdesk" xsi:type="object">Mirasvit\Helpdesk\Block\Adminhtml\Menu</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Block\Page\Header">
+        <plugin name="HelpdeskHtmlAfterPlugin" type="Mirasvit\Helpdesk\Plugin\HtmlAfter" sortOrder="1000"/>
+    </type>
+    <type name="Magento\Ui\Model\Export\MetadataProvider">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="sales_order_view_helpdesk_tickets_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                    <item name="last_reply_at" xsi:type="string">last_reply_at</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

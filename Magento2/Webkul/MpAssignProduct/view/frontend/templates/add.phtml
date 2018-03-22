@@ -1,0 +1,206 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_MpAssignProduct
+ * @author    Webkul
+ * @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<?php
+    $helper = $this->helper("Webkul\MpAssignProduct\Helper\Data");
+    $queryString = $helper->getQueryString();
+    $isPartner = $this->helper('Webkul\Marketplace\Helper\Data')->isSeller();
+    $collection = $this->getAllProducts();
+    $imagehelper = $this->helper('Magento\Catalog\Helper\Image');
+    $productId = $helper->getProductId();
+    $product = $helper->getProduct();
+    $image = 'category_page_list';
+    $productImage = $imagehelper->init($product, $image)
+                                ->constrainOnly(FALSE)
+                                ->keepAspectRatio(TRUE)
+                                ->keepFrame(FALSE)
+                                ->resize(300)
+                                ->getUrl();
+    $price = $this->helper('Magento\Framework\Pricing\Helper\Data')
+                    ->currency($product
+                    ->getFinalPrice(), true, false);
+    $productType = $product->getTypeId();
+
+    $attriburtes = [];
+    $options = [];
+    if ($productType == "configurable") {
+        $_attributes = $product->getTypeInstance(true)
+                                ->getConfigurableAttributesAsArray($product);
+        foreach ($_attributes as $_attribute) {
+            $attriburtes[$_attribute['attribute_code']] = $_attribute['store_label'];
+            foreach ($_attribute['options'] as $option) {
+                $options[$_attribute['attribute_code']][$option['value']] = $option['label'];
+            }
+        }
+        $isConfig = 1;
+    } else {
+        $isConfig = 0;
+    }
+?>
+<?php
+    $addImageLabel = __("Add Image");
+    $baseImageLabel = __("Base Image");
+    $deleteImageLabel = __("Delete Showcase");
+    $blockHtml = '<div class="wk-showcase-block">';
+    $blockHtml .= '<div title= "'.$deleteImageLabel.'" class="wk-delete-item">x</div>';
+    $blockHtml .= '<div class="wk-default-block">'.$addImageLabel.'</div>';
+    $blockHtml .= '<input type="file" name="showcase[]" accept="image/*" class="wk-showcase-img wk-no-display">';
+	$blockHtml .= '<div class="wk-base-image-block"><input name="wk_base[]" type="checkbox" class="wk-base-image-input" value="0"><div class="wk-base-image-label">'.$baseImageLabel.'</div></div>';
+    $blockHtml .= '</div>';
+    $count = 0;
+?>
+<?php if ($isPartner == 1): ?>
+    <fieldset class="fieldset wk-ap-fieldset">
+        <div class="wk-ap-product-view">
+            <div class="wk-ap-product-img"><img src="<?php echo $productImage; ?>" /></div>
+            <div class="wk-ap-product-description">
+                <div class="wk-ap-main-product-name">
+                    <div class="wk-ap-main-product-price clr_blue"><?php echo $product->getName(); ?> </div></div>
+                <div class="wk-ap-main-product-description"><?php echo $product->getDescription(); ?></div>
+            </div>
+        </div>
+    </fieldset>
+    <form method="post" action="<?php echo $this->getUrl('mpassignproduct/product/save'); ?>" id="wk_mpassignproduct_form" enctype="multipart/form-data" data-mage-init='{"validation":{}}'>
+        <input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>">
+        <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
+        <fieldset class="fieldset">
+            <?php echo $this->getFormKeyBlockHtml(); ?>
+            <legend class="legend">
+                <span><?php echo __('Assign Product'); ?></span>
+            </legend>
+            <div class="field required hide">
+                <label for="product_    tion" class="label">
+                    <span><?php echo __('Product Condition'); ?></span>
+                </label>
+                <div class="control">
+                    <select aria-required="true" name="product_condition" id="product_condition" class="required-entry" title="<?php echo __('Product Condition'); ?>" data-validate="{'validate-select':true}">
+                        <option value="1"><?php echo __('New'); ?></option>
+                        <option value="2"><?php echo __('Used'); ?></option>
+                    </select>
+                </div>
+            </div>
+            <?php if ($productType != "configurable"): ?>
+                <div class="field required">
+                    <label for="price" class="label">
+                        <span><?php echo __('Price for Selected Period'); ?></span>
+                    </label>
+                    <div class="control">
+                        <input value="" type="text" data-validate="{required:true}" class="input-text required-entry validate-zero-or-greater" title="<?php echo __('Price for Selected Period'); ?>" name="price" id="price" aria-required="true">
+                    </div>
+                </div>
+                <div class="field required">
+                    <label for="qty" class="label">
+                        <span><?php echo __('Quantity'); ?></span>
+                    </label>
+                    <div class="control">
+                        <input value="" type="text" data-validate="{required:true}" class="input-text required-entry validate-number" title="<?php echo __('Quantity'); ?>" name="qty" id="qty" aria-required="true">
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="field required hide">
+                <label for="description" class="label">
+                    <span><?php echo __('Description'); ?></span>
+                </label>
+                <div class="control">
+                    <textarea data-validate="{required:true}" class="input-text required-entry" title="<?php echo __('Description'); ?>" name="description" id="description" aria-required="true"><?php echo $product->getName(); ?></textarea>
+                </div>
+            </div>
+            <?php if ($productType == "configurable"): ?>
+                <div class="field required">
+                    <label for="qty" class="label">
+                        <span><?php echo __('Associated Products'); ?></span>
+                    </label>
+                    <div class="control">
+                        <table class="data table wk-associated-table">
+                            <thead>
+                                <tr>
+                                    <th class="col"><input type="checkbox" class="wk-mass-associate"></th>
+                                    <th class="col"><?php echo __("Product Name"); ?></th>
+                                    <th class="col"><?php echo __("Qty"); ?></th>
+                                    <?php foreach ($attriburtes as $code => $label): ?>
+                                        <th class="col"><?php echo $label; ?></th>
+                                    <?php endforeach; ?>
+                                    <th class="col"><?php echo __("Price"); ?></th>
+                                </tr>
+                            </thead>
+                            <?php
+                                $productTypeInstance = $product->getTypeInstance();
+                                $usedProducts = $productTypeInstance->getUsedProducts($product);
+                                foreach ($usedProducts  as $childProduct) {
+                                    $childProduct->getName();
+                                    foreach ($attriburtes as $code => $label) {
+                                        $val = $childProduct[$code];
+                                        $options[$code][$val];
+                                    }
+                                }
+                            ?>
+                            <tbody>
+                                <?php foreach ($usedProducts  as $childProduct): ?>
+                                    <tr>
+                                        <td class="col"><input class="wk-associate-chkbox" name="products[<?php echo $childProduct->getId(); ?>][id]" type="checkbox" value="1"></td>
+                                        <td class="col"><?php echo $childProduct->getName(); ?></td>
+                                        <td class="wk-associate-qty" class="col"><input name="products[<?php echo $childProduct->getId(); ?>][qty]" type="text"></td>
+                                        <?php foreach ($attriburtes as $code => $label): ?>
+                                            <?php $val = $childProduct[$code]; ?>
+                                            <td class="col"><?php echo $options[$code][$val]; ?></td>
+                                        <?php endforeach; ?>
+                                        <td class="col"><input class="wk-associate-price" name="products[<?php echo $childProduct->getId(); ?>][price]" type="text"></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="field hide">
+                <div class="wk-showcase-container">
+					<input type="hidden" name="delete_ids" value="" id="delete_ids">
+					<input type="hidden" name="base_image" value="" id="base_image">
+					<input type="hidden" name="total" value="" id="total">
+					<div class="wk-button-set">
+						<div class="wk-add-showcase-btn btn-rounded"><?php echo __("Add Product Image"); ?></div>
+					</div>
+				</div>
+            </div>
+            <p class="clr-gray">Please note that prices entered here are inclusive of GST and Everyskip’s 10% booking fee</p>
+            <br/>
+            <div class="field required">
+				<div class="control">
+					<button class="btn btn-rounded btn-green  btn-small" type="submit">
+						<span><span><?php echo __("Save Product"); ?></span></span>
+					</button>
+				</div>
+			</div>
+        </fieldset>
+        <br/><br/>
+    </form>
+    <?php
+        $data = [];
+        $data["defaultImage"] = "";
+        $data["msg"] = __("Please select associated product.");
+        $data["is_new"] = 1;
+        $data["isConfig"] = $isConfig;
+        $data["count"] = $count;
+	    $data["blockHtml"] = $blockHtml;
+        $data = json_encode($data);
+    ?>
+    <script type="text/x-magento-init">
+        {
+            "body": {
+                "Webkul_MpAssignProduct/js/item": <?php echo $data ?>
+            }
+        }
+    </script>
+<?php else: ?>
+    <h2 class="wk-mp-error-msg">
+        <?php echo __("To Become Seller Please Contact to Admin."); ?>
+    </h2>
+<?php endif; ?>

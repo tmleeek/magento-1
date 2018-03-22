@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright : 2016 Pixafy Services LLC. All rights reserved.
+ * @license  http://opensource.org/licenses/OSL-3.0  The Open Software License 3.0 (OSL 3.0)
+ * @author Alex Lukyanau <alukyanau@pixafy.com>
+ */ 
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <tax>
+ 			<vertexsmb_settings>        
+                <enable_vertexsmb><![CDATA[0]]></enable_vertexsmb>
+                <trustedId><![CDATA[]]></trustedId>               
+                <invoice_order><![CDATA[invoice_created]]></invoice_order>   
+                <api_url><![CDATA[]]></api_url>  
+                <address_api_url><![CDATA[]]></address_api_url>  
+                <show_manual_button><![CDATA[0]]></show_manual_button> 
+                <show_taxrequest_popup><![CDATA[1]]></show_taxrequest_popup>    
+            </vertexsmb_settings>
+            <classes>     
+                <default_customer_code><![CDATA[General]]></default_customer_code>
+            </classes>                
+        </tax>
+    </default>
+</config>

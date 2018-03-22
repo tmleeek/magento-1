@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- /**
+* Webkul Software
+*
+* @category Webkul
+* @package Webkul_Stripe
+* @author Webkul
+* @copyright Copyright (c) 2010-2017 Webkul Software Private Limited (https://webkul.com)
+* @license https://store.webkul.com/license.html
+*/ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+        	<stripe>
+                <active>0</active>
+            	<model>Webkul\Stripe\Model\PaymentMethod</model>
+            	<payment_action>authorize_capture</payment_action>
+                <order_status>processing</order_status>
+            	<title>Pay by Credit Card via Stripe</title>
+            	<name_on_form>Stripe Pay</name_on_form>
+                <min_order_total>0.50</min_order_total>
+                <bitcoin>0</bitcoin>
+                <alipay>0</alipay>
+                <zip_code_validation>0</zip_code_validation>
+                <shipping_address>0</shipping_address>
+                <billing_address>0</billing_address>
+            </stripe>
+    	</payment>
+    </default>
+</config>
